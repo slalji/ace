@@ -8,22 +8,25 @@ $( document ).ready(function() {
     status['SUCCESS'] = '<span class="label label-sm label-success">Success</span>';
     status['FAILED'] = '<span class="label label-sm label-danger">Failed</span>';
 
+    var groups = {};
 
 
     //groupid
     console.log( "ready!" );
-    console.log();
+    //console.log();
     $.ajax({
         type: 'get',
         url: 'ajax/getGroup.php',
         dataType: 'json',
-
+        async: false,
         success: function (response) {
 
             var str = "<option value=''>ALL Groups</option>";
+
             $.each(response, function(index, element) {
 
                 str += "<option value='"+element.groupid+"'>"+element.name+"</option>";
+                groups[element.groupid] = "<span style='text-transform:lowercase'> "+element.name+"</span>";
 
             });
 
@@ -31,8 +34,10 @@ $( document ).ready(function() {
             $('#groupname').html(str);
 
 
+
         }
     });
+   // console.log('groups:'+JSON.stringify(groups));
     // main content
     $.ajax({
         type: 'get',
@@ -46,16 +51,16 @@ $( document ).ready(function() {
             var str='';
             $.each(response, function(index, element) {
 
-                str += "<tr><td>"+element.id+"</td>"+
+                str += "<tr><td class='hidden'>"+element.id+"</td>"+
                 "<td>"+element.fulltimestamp+
-                "<td>"+element.msisdn+"</td>"+
+                "<td><span class='phone'>"+element.msisdn+"</span></td>"+
                 "<td>"+element.account+"</td>"+
-                "<td>"+element.service+"</td>"+
+                "<td style='text-transform: lowercase'>"+element.service+"</td>"+
                 "<td>"+element.reference+"</td>"+
                 "<td>"+element.amount+"</td>"+
-                "<td>"+status[element.tstatus]+"</td>"+
+                "<td >"+status[element.tstatus]+"</td>"+
                 "<td>"+lang[element.lang]+"</td>"+
-                "<td>"+element.groupid+"</td>"+
+                "<td>"+groups[element.groupid]+"</td>"+
                 "</tr>";
 
                 //console.log(JSON.stringify(str));
@@ -70,7 +75,7 @@ $( document ).ready(function() {
     });
     $('#calshow').change(function() {
        var ch =  $('#calshow').val(this.checked);
-        console.log('checked: '+ch);
+       // console.log('checked: '+ch);
     });
     $("#theform").submit(function(event){
         event.preventDefault();
@@ -97,20 +102,21 @@ $( document ).ready(function() {
             data: {id: groupid, phone: phone, ref: ref, startDate: startDate, endDate: endDate},
             error: function(response){console.log(response)},
             success: function (response) {
-                //console.log(response);
+                console.log(response);
                 var str='';
                 $.each(response, function(index, element) {
-
-                    str += "<tr><td>"+element.id+"</td>"+
+                    var phone = element.msisdn;
+                    ph = phone.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, "($1) $2 $3");
+                    str += "<tr><td class='hidden'>"+element.id+"</td>"+
                     "<td>"+element.fulltimestamp+
-                    "<td>"+element.msisdn+"</td>"+
+                    "<td><span class='phone'>"+ph+"</span></td>"+
                     "<td>"+element.account+"</td>"+
                     "<td>"+element.service+"</td>"+
                     "<td>"+element.reference+"</td>"+
                     "<td>"+element.amount.toLocaleString()+"</td>"+
                     "<td>"+status[element.tstatus]+"</td>"+
                     "<td>"+lang[element.lang]+"</td>"+
-                    "<td>"+element.groupid+"</td>"+
+                    "<td>"+groups[element.groupid]+"</td>"+
                     "</tr>";
 
                     //console.log(str);
@@ -119,10 +125,13 @@ $( document ).ready(function() {
             }
         });
     });
+//phone number masking
 
 
 
 });
+
+
 
 
 

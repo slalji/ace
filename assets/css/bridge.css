@@ -16,3 +16,7 @@
     float:left;
     color:#fff;                 /*add font color*/
 }
+.titlecase
+{
+    text-transform:lowercase;
+}
