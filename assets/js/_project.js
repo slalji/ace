@@ -5,16 +5,12 @@ $( document ).ready(function() {
     var status ={};
     status['SUCCESS'] = '<span class="label label-sm label-success">Success</span>';
     status['FAILED'] = '<span class="label label-sm label-danger">Failed</span>';
-
-
 //global variables
     var phone = document.getElementById('phone').value;
     var ref = document.getElementById('ref').value;
     var groupid = document.getElementById('groupname').value;
     var startDate='';
     var endDate='';
-
-
     //groupid
 
     $.ajax({
@@ -39,6 +35,55 @@ $( document ).ready(function() {
         }
     });
 
+        $('#dynamic_table').DataTable( {
+            "ajax": "ajax/getItem.php",
+            "columns": [
+                { "data": "id" },
+                { "data": "fulltimestamp" },
+                { "data": "msisdn" },
+                { "data": "account" },
+                { "data": "service" },
+                { "data": "reference" }
+            ]
+        } );
+
+    // main content
+    /*$.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: 'ajax/getItem',
+        data: {id: groupid, phone: phone, ref: ref, startDate: startDate, endDate: endDate},
+        success: function(d) {
+           //console.log((d.data));
+            var str='';
+            $.each(d.data, function(index, element) {
+
+                str += "<tr><td>"+element.id+"</td>"+
+                "<td>"+element.fulltimestamp+
+                "<td >"+element.msisdn+"</td>"+
+                "<td>"+element.account+"</td>"+
+                "<td>"+element.service+"</td>"+
+                "<td>"+element.reference+"</td>"+
+                "<td>"+element.amount+"</td>"+
+                "<td>"+status[element.tstatus]+"</td>"+
+                "<td>"+lang[element.lang]+"</td>"+
+                "<td>"+element.groupid+"</td>"+
+                "</tr>";
+
+
+            });
+            //console.log(str);
+            //console.log(JSON.stringify(d.data));
+            $('#transaction_table').innerHTML=str;
+            $('#dynamic_table').DataTable({
+               dom: "Bfrtip",
+                data: (d.data),
+                cols: (d.cols)
+
+            });
+
+        }
+    });*/
 
 
     $("#theform").submit(function(event){
@@ -75,7 +120,7 @@ $( document ).ready(function() {
 
 jQuery(function($) {
 
-   // $("#reportrange").hide();
+    $("#reportrange").hide();
     $("#calshow").click(function() {
         if($(this).is(":checked")) {
             $("#reportrange").show(300);
@@ -88,12 +133,10 @@ jQuery(function($) {
     var end = moment();
 
     function cb(start, end) {
-        //$('#reportrange span').html(start.format('MMM D, YYYY') + ' - ' + end.format('MMM D, YYYY'));
-       $('#min-date').val(start.format('MMM D, YYYY') + ' - ' + end.format('MMM D, YYYY'));
+        $('#reportrange span').html(start.format('MMM D, YYYY') + ' - ' + end.format('MMM D, YYYY'));
     }
 
-    $('#min-date').daterangepicker({
-
+    $('#reportrange').daterangepicker({
         startDate: start,
         endDate: end,
         ranges: {

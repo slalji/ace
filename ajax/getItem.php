@@ -2,28 +2,34 @@
 require_once '../includes/db.php'; // The mysql database connection script
 $filter = '';
 $where = '';
-$flag = false;
 
-if(isset($_GET['id'])){
+
+
+if(isset($groupid) ){
 	$where ='where ';
-	$filter = "groupid like '%".$mysqli->real_escape_string($_GET['id'])."%'";
+	$groupid = $mysqli->real_escape_string($_GET['groupid']);
+	$filter = "groupid like '%".$groupid."%'";
 }
-if(isset($_GET['phone'])){
+if(isset($phone)){
 	$where ='where ';
-	$filter .= " and msisdn like '%".$mysqli->real_escape_string($_GET['phone'])."%'";
+	$phone = $mysqli->real_escape_string($_GET['phone']);
+	$filter .= " and msisdn like '%".$phone."%'";
 }
-if(isset($_GET['ref'])){
+if(isset($ref)){
 	$where ='where ';
-	$filter .= " and reference like '%".$mysqli->real_escape_string($_GET['ref'])."%'";
+	$ref = $mysqli->real_escape_string($_GET['ref']);
+	$filter .= " and reference like '%".$ref;
 }
 
-if(isset($_GET['startDate']) && $_GET['startDate'] != ''){
-	$filter .= " and fulltimestamp >= '".$mysqli->real_escape_string($_GET['startDate'])."'";
+if(isset($startDate) && $startDate != ''){
+	$startDate = $mysqli->real_escape_string($_GET['startDate']);
+	$filter .= " and fulltimestamp >= '".$startDate;
 }
-if(isset($_GET['endDate'])&& $_GET['endDate'] != ''){
-	$filter .= " and fulltimestamp <= '".$mysqli->real_escape_string($_GET['endDate'])."'";
+if(isset($endDate) && $endDate != ''){
+	$endDate = $mysqli->real_escape_string($_GET['startDate']);
+	$filter .= " and fulltimestamp <= '".$$endDate;
 }
-if (!isset($_GET['startDate']) && !isset($_GET['endDate'])  && !isset($_GET['id'] ))
+if (!isset($startDate) && !isset($endDate)  )
 	$query="SELECT id, fulltimestamp,msisdn, account,service,reference, amount,tstatus,lang, groupid from transactions order by fulltimestamp desc";
 else
 	$query="SELECT id, fulltimestamp,msisdn, account,service,reference, amount,tstatus,lang, groupid from transactions $where $filter  order by fulltimestamp desc";
@@ -37,7 +43,11 @@ if($result->num_rows > 0) {
 	}
 }
 
+$jsonData['data']=$arr;
+$cols = ['id','fulltimestamp', 'msisdn','account', 'service','references','amount','status','lang','groupid'];
+$jsonData['columns']= $cols;
+echo json_encode($jsonData);//.$query;
 //echo $query ."<p>";
 # JSON-encode the response
-echo $json_response = json_encode($arr);//.$query;
+//echo $json_response = json_encode($arr);//.$query;
 ?>
