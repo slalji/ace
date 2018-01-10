@@ -1,3 +1,12 @@
+var lang = {};
+ lang['SW'] = 'Swahili';
+
+//$lang=array('SW'=>'Swahili', 'EN'=>'English');
+
+var status ={};
+status['SUCCESS'] = '<span class="label label-sm label-success">Success</span>';
+status['FAILED'] = '<span class="label label-sm label-danger">Failed</span>';
+
 jQuery(function($) {
     //initiate dataTables plugin
     var section = $('#section').html();

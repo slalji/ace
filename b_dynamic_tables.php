@@ -32,8 +32,15 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'none';
 
 
 						<div class="page-header">
-							<h1>
-								<div style="display: none" id="section"><?php echo $page; ?></div>
+							<div style="display: none" id="section"><?php echo $page; ?></div>
+							<h1 >
+
+								<?php
+									if ($page == 'transactions')
+										echo 'Transactions';
+									else if ($page == 'accountstatement')
+										echo 'Account Statement';
+								?>
 
 							</h1>
 						</div><!-- /.page-header -->
