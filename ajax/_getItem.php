@@ -2,14 +2,9 @@
 require_once '../includes/db.php'; // The mysql database connection script
 $filter = '';
 $where = '';
-$table ='';
 
-$section = $mysqli->real_escape_string($_GET['section']);
 
-if(isset($section) ){
-	$table = $section;
-}
-/*
+
 if(isset($groupid) ){
 	$where ='where ';
 	$groupid = $mysqli->real_escape_string($_GET['groupid']);
@@ -38,10 +33,6 @@ if (!isset($startDate) && !isset($endDate)  )
 	$query="SELECT id, fulltimestamp,msisdn, account,service,reference, amount,tstatus,lang, groupid from transactions order by fulltimestamp desc";
 else
 	$query="SELECT id, fulltimestamp,msisdn, account,service,reference, amount,tstatus,lang, groupid from transactions $where $filter  order by fulltimestamp desc";
-*/
-$query=$table;
-if ($table == 'transactions')
-	$query="SELECT t.id, t.fulltimestamp, t.msisdn, t.account, t.service,t.reference, t.amount, t.tstatus, t.lang, s.name from transactions t join savings_group s on s.groupid = t.groupid order by fulltimestamp desc";
 
 $result = $mysqli->query($query) or die($mysqli->error.__LINE__);
 
@@ -53,7 +44,7 @@ if($result->num_rows > 0) {
 }
 
 $jsonData['data']=$arr;
-$cols = ['id','fulltimestamp', 'msisdn','account', 'service','references','amount','status','lang','name'];
+$cols = ['id','fulltimestamp', 'msisdn','account', 'service','references','amount','status','lang','groupid'];
 $jsonData['columns']= $cols;
 echo json_encode($jsonData);//.$query;
 //echo $query ."<p>";
