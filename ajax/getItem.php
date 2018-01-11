@@ -37,15 +37,16 @@ foreach($arr as $d){
 	foreach ($d as $key => $value) {
 		if ($key == 'msisdn') {
 
-			$val = '+' . preg_replace('/\d{3}/', '$0-', str_replace('.', null, trim($value)), 2);
+			$val = '+' . preg_replace('/\d{3}/', '$0 ', str_replace('.', null, trim($value)), 3);
 			$d['msisdn'] = $val;
+
 			//echo $value;
 		}
 		if ($key == 'tstatus' && $value == 'SUCCESS'){
 			$val='<span class="label label-success">' .$value.'</span>';
 			$d['tstatus'] = $val;
 		}
-		else if ($key == 'tstatus' && $value == 'FAILURE'){
+		if ($key == 'tstatus' && $value == 'FAILED'){
 			$val='<span class="label label-danager">' .$value.'</span>';
 			$d['tstatus'] = $val;
 		}

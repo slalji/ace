@@ -1,5 +1,5 @@
 <?php
-$page = isset($_GET['page']) ? $_GET['page'] : 'none';
+$page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,8 +7,8 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'none';
 	<?php include_once('layout/sidenav.html'); ?>
 			<div class="main-content">
 				<div class="main-content-inner">
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
-						<ul class="breadcrumb">
+				 <div class="breadcrumbs ace-save-state" id="breadcrumbs" style="display:none">
+					<!--	<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
@@ -20,7 +20,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'none';
 							<li class="active">Simple &amp; Dynamic</li>
 						</ul><!-- /.breadcrumb -->
 
-						<div class="nav-search" id="nav-search">
+					<div class="nav-search" id="nav-search">
 							<!--<form class="form-search">
 								<span class="input-icon">
 									<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
@@ -40,6 +40,8 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'none';
 										echo 'Transactions';
 									else if ($page == 'accountstatement')
 										echo 'Account Statement';
+									else
+										echo 'Dashboard';
 								?>
 
 							</h1>
@@ -51,8 +53,10 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'none';
 
 									<?php
 
-
-										include "app/".$page.'.php';
+										if (isset($page))
+											include "app/".$page.".php";
+										else
+											include "app/dashboard.php";
 
 									?>
 
