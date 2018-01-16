@@ -43,6 +43,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="ModalLabel">Update Service Message</h5>
+                            <div class="message" id="message"></div>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -50,14 +51,14 @@
                         <div class="modal-body">
 
                             <div class="col-xs-12 col-sm-9">
-                                <form id="thisform" method="post" action="#">
+                                <form id="theForm" method="post" action="#">
 
                                 <div class="form-group">
                                     <div class="col-xs-12 col-sm-6">
                                         <table>
                                             <tr>
                                                 <td></td>
-                                                <td><input type="text" name="row-id" id="row-id" value=""/></td>
+                                                <td><input type="hidden"  name="row-id" id="row-id" value=""/></td>
                                             </tr>
                                         <tr>
                                             <td><label>Service</label></td>

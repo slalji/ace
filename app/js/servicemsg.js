@@ -18,14 +18,26 @@ $(document).ready(function() {
     });
     // Save Form Data insert to setService
     $( "#save" ).click(function() {
+
         $.ajax({
             type: 'POST',
             url: 'ajax/setService',
-            data: form.serialize(),
+            data: $( "#theForm" ).serialize(),
             success: function( response ) {
                 console.log( response );
+                document.getElementById('message').innerHTML = '<div class="alert alert-success"> <strong>Saved !</strong> </div>';
+                window.setTimeout(function () {
+                    $("#message").hide();
+                    $("#myModal").modal("hide");
+
+                }, 1000);
             }
+
+
+
+
         });
+        window.location.reload();
     });
 });
 

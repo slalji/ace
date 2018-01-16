@@ -2,23 +2,23 @@
 require_once '../includes/db.php'; // The mysql database connection script
 //if insert key is pressed then do insertion
 
-if($_POST['submit'] == 'save'){
+if(isset($_POST['row-id'])){
 
-	$id  = mysql_real_escape_string($_POST['id']);
-	$service = mysql_real_escape_string($_POST['service']);
-	$description = mysql_real_escape_string($_POST['description']);
-	$errorcode = mysql_real_escape_string($_POST['errorcode']);
-	$recipient = mysql_real_escape_string($_POST['recipient']);
-	$en_msg = mysql_real_escape_string($_POST['en_msg']);
-	$sw_msg = mysql_real_escape_string($_POST['sw_msg']);
+	$id  =($_POST['row-id']);
+	$service =($_POST['service']);
+	$description =($_POST['description']);
+	$errorcode =($_POST['errorcode']);
+	$recipient =($_POST['recipient']);
+	$en_msg =($_POST['en_msg']);
+	$sw_msg =($_POST['sw_msg']);
 
 
-	$query   = "update service_message set description = $description, service=$service, errorcode=$errorcode,recipient=$recipient,en_msg=$en_msg,sw_msg=$sw_msg where id = " .$id;
+	$query   = "update service_message set description = '$description', service='$service', errorcode='$errorcode',recipient='$recipient',en_msg='$en_msg',sw_msg='$sw_msg' where id = '" .$id."'";
 	$result = $mysqli->query($query) or die($mysqli->error.__LINE__);
 	if ($result)
 		echo true;
 	else
-		echo $mysqli->error.__LINE__);
+		echo $mysqli->error.__LINE__;
 
 }
 else
