@@ -50,6 +50,7 @@
                         <div class="modal-body">
 
                             <div class="col-xs-12 col-sm-9">
+                                <form id="thisform" method="post" action="#">
 
                                 <div class="form-group">
                                     <div class="col-xs-12 col-sm-6">
@@ -66,7 +67,7 @@
                                         </tr>
                                             <tr>
                                                 <td><label>Description</label></td>
-                                                <td> <textarea name="description" id="description" value="" placeholder="description"></textarea></td>
+                                                <td> <textarea name="description" id="description" value="" placeholder="description" rows="5" cols="20"></textarea></td>
                                             </tr>
                                             <tr>
                                                 <td><label>Error Code</label></td>
@@ -78,20 +79,21 @@
                                             </tr>
                                             <tr>
                                                 <td><label>English</label></td>
-                                                <td><textarea name="en_msg" id="en_msg" value="" placeholder="en_msg"></textarea></td>
+                                                <td><textarea name="en_msg" id="en_msg" value="" placeholder="en_msg" rows="5" cols="20"></textarea></td>
                                             </tr>
                                             <tr>
                                                 <td><label>Swahili</label></td>
-                                                <td> <textarea name="sw_msg" id="sw_msg" value="" placeholder="sw_msg"></textarea></td>
+                                                <td> <textarea name="sw_msg" id="sw_msg" value="" placeholder="sw_msg" rows="5" cols="20"></textarea></td>
                                             </tr>
                                         </table>
                                     </div>
                                 </div>
                             </div>
+                            </form>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="btn btn-primary" id="save" value="save" name="submit">Save changes</button>
                         </div>
                     </div>
                 </div>
@@ -100,28 +102,4 @@
         </div>
     </div>
 </div>
-<script>
 
-    /*
- $( document ).ready(function() {
-    var select = $.ajax({
-        type: 'GET',
-        dataType: 'json',
-        url: 'ajax/getServices',
-
-        success: function (d) {
-            console.log((d.service));
-            var str = '<option value=0>Select</option>';
-            $.each(d.service, function (index, element) {
-
-                str += "<option value=" + element.service + ">" + element.service + "</option>";
-
-
-            });
-            //console.log(str);
-            //console.log(JSON.stringify(d.data));
-            $('#select-option').innerHTML = str;
-        }
-    });
-    });*/
-</script>

@@ -3,12 +3,6 @@ require_once '../includes/db.php'; // The mysql database connection script
 $filter = '';
 $where = '';
 $section ='';
-$id='';
-$section='';
-
-
-if (isset ($_GET['id']))
-	$id = $mysqli->real_escape_string($_GET['id']);
 
 if(isset($_GET['section'])){
 	$section = $mysqli->real_escape_string($_GET['section']);
@@ -29,10 +23,8 @@ else if ($section == 'savingsgroup')
 	$query="SELECT * from savings_group t order by fulltimestamp desc ";
 else if ($section == 'logs')
 	$query="SELECT t.id, t.date, s.name, t.reference, t.step, t.description  from tlog t join savings_group s on s.groupid = t.groupid  order by t.date desc";
-else if ($section == 'servicemsg' && !$id)
+else if ($section == 'servicemsg' )
 	$query="SELECT id, service, description, errorcode,recipient,en_msg, sw_msg from service_message t order by id desc";
-else if ($section == 'servicemsg' && $id > 0)
-	$query="SELECT id, service, description, errorcode,recipient,en_msg, sw_msg from service_message where id =  ".$id;
 
 $result = $mysqli->query($query) or die($mysqli->error.__LINE__);
 
@@ -46,7 +38,7 @@ if($result->num_rows > 0) {
 	}
 
 }
-var_dump($query);
+//var_dump($query);
 
 //$jsonData['data']=$arr;
 

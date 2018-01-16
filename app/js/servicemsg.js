@@ -2,7 +2,7 @@ $(document).ready(function() {
     var section = $('#section').html();
     $.ajax({
         type: 'GET',
-        url: 'ajax/getItem',
+        url: 'ajax/getService',
         data:{section:'servicemsg'},
         success: function(data) {
 
@@ -15,6 +15,17 @@ $(document).ready(function() {
             document.getElementById('service').innerHTML = str;
             //console.log($('#service').html());
         }
+    });
+    // Save Form Data insert to setService
+    $( "#save" ).click(function() {
+        $.ajax({
+            type: 'POST',
+            url: 'ajax/setService',
+            data: form.serialize(),
+            success: function( response ) {
+                console.log( response );
+            }
+        });
     });
 });
 
@@ -51,20 +62,26 @@ jQuery(function($) {
         var rowId = $('#row-id').val();
         console.log('rowId '+rowId);
         $.ajax({
-            url: 'ajax/getItem.php',
+            url: 'ajax/getServiceItem.php',
             type: 'GET',
             dataType: 'json',
             data: {section:section,id:rowId},
             success: function(obj) {
 
-                $.each(obj.data, function (index, value) {
-                    document.getElementById('description').innerHTML = value.description;
-                    document.getElementById('errorcode').innerHTML = value.errorcode;
-                    document.getElementById('recipient').innerHTML = value.recipient;
-                    document.getElementById('en_msg').innerHTML = value.en_msg;
-                    document.getElementById('sw_msg').innerHTML = value.sw_msg;
+                $.each(obj, function (index, element) {
+                    document.getElementById('description').innerHTML = element.description;
+                    document.getElementById('errorcode').value= element.errorcode;
+                    document.getElementById('recipient').value = element.recipient;
+                    document.getElementById('en_msg').innerHTML = element.en_msg;
+                    document.getElementById('sw_msg').innerHTML = element.sw_msg;
+                    var country = document.getElementById("service");
+                    console.log(element.errorcode);
+                    var option = $('#service').children('option[value="'+ element.service +'"]');
+                    option.attr('selected', 'selected');
+
                 });
 
+                //console.log(obj);
             }
         });
 
