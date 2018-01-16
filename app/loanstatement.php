@@ -33,7 +33,7 @@
                 </tr>
                 </thead>
 
-                <tbody id="transaction_table">
+                <tbody >
 
                 </tbody>
             </table>

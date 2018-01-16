@@ -1,5 +1,108 @@
+$(document).ready(function() {
+    var section = $('#section').html();
+    $.ajax({
+        type: 'GET',
+        url: 'ajax/getItem',
+        data:{section:'servicemsg'},
+        success: function(data) {
+
+            var obj = jQuery.parseJSON(data);
+
+            var str = '<option value=0>Select Service</option>';
+            $.each(obj, function (index, value) {
+                str += "<option value=" + value['service'] + ">" + value['service'] + "</option>";
+            });
+            document.getElementById('service').innerHTML = str;
+            //console.log($('#service').html());
+        }
+    });
+});
+
+/*$(document).ready(function() {
+    fn_service($('#service').val());
+    $('#service').change(function() {
+        id = $(this).val();
+        fn_service(id);
+    });
+});
+
+
+$('#myModal').on('shown.bs.modal', function (e) {
+    fn_service($('#service').val());
+    $('#service').change(function() {
+        id = $(this).val();
+        fn_service(id);
+    });
+});
+*/
 jQuery(function($) {
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').focus()
+    });
+    $('#myModal').on('show.bs.modal', function(e) {
+
+        //get data-id attribute of the clicked element
+        var rowId = $(e.relatedTarget).data('row-id');
+
+        //populate the textbox
+
+        $(e.currentTarget).find('input[name="row-id"]').val(rowId);
+        var section = $('#section').html();
+        var rowId = $('#row-id').val();
+        console.log('rowId '+rowId);
+        $.ajax({
+            url: 'ajax/getItem.php',
+            type: 'GET',
+            dataType: 'json',
+            data: {section:section,id:rowId},
+            success: function(obj) {
+
+                $.each(obj.data, function (index, value) {
+                    document.getElementById('description').innerHTML = value.description;
+                    document.getElementById('errorcode').innerHTML = value.errorcode;
+                    document.getElementById('recipient').innerHTML = value.recipient;
+                    document.getElementById('en_msg').innerHTML = value.en_msg;
+                    document.getElementById('sw_msg').innerHTML = value.sw_msg;
+                });
+
+            }
+        });
+
+
+    });
+
     //initiate dataTables plugin
+
+    // New record
+    $('a.editor_create').on('click', function (e) {
+        e.preventDefault();
+
+        editor.create( {
+            title: 'Create new record',
+            buttons: 'Add'
+        } );
+    } );
+
+    // Edit record
+    $('#dynamic-table').on('click', 'a.editor_edit', function (e) {
+        e.preventDefault();
+
+        editor.edit( $(this).closest('tr'), {
+            title: 'Edit record',
+            buttons: 'Update'
+        } );
+    } );
+
+    // Delete a record
+    $('#dynamic-table').on('click', 'a.editor_remove', function (e) {
+        e.preventDefault();
+
+        editor.remove( $(this).closest('tr'), {
+            title: 'Delete record',
+            message: 'Are you sure you wish to remove this record?',
+            buttons: 'Delete'
+        } );
+    } );
     var section = $('#section').html();
     console.log(section);
     var myTable =
@@ -12,19 +115,20 @@ jQuery(function($) {
                 dataType: 'json',
                 data: {section:section}
             },
+           // data-toggle="modal" data-target="#exampleModal"
             "columns": [
+                {"mRender": function ( data, type, row ) {
+                    return '<a href="#" data-toggle="modal" data-target="#myModal" data-row-id='+row.id+'><i class="fa fa-pencil"></i></a>';}
+                },
                 { "data": "id" },
-                { "data": "fulltimestamp" },
-                { "data": "msisdn" },
-                { "data": "transtype" },
-                { "data": "transid" },
-                { "data": "reference" },
                 { "data": "service" },
-                { "data": "amount" },
-                { "data": "triggeredby" },
-                { "data": "obal" },
-                { "data": "cbal" },
-                { "data": "name" }
+                { "data": "description" },
+                { "data": "errorcode" },
+                { "data": "recipient" },
+                { "data": "en_msg" },
+                { "data": "sw_msg" }
+
+
 
             ],
             "dom": '<"toolbar">frtip'
@@ -238,3 +342,4 @@ jQuery(function($) {
 
 
 })
+

@@ -12,19 +12,18 @@ jQuery(function($) {
                 dataType: 'json',
                 data: {section:section}
             },
+
             "columns": [
                 { "data": "id" },
                 { "data": "fulltimestamp" },
                 { "data": "msisdn" },
-                { "data": "transtype" },
-                { "data": "transid" },
-                { "data": "reference" },
-                { "data": "service" },
-                { "data": "amount" },
-                { "data": "triggeredby" },
-                { "data": "obal" },
-                { "data": "cbal" },
-                { "data": "name" }
+                { "data": "name" },
+                { "data": "userfee" },
+                { "data": "total_shareout" },
+                { "data": "totalsavings" },
+                { "data": "income" },
+                { "data": "avg_balance" },
+                { "data": "sum_avg_balance" }
 
             ],
             "dom": '<"toolbar">frtip'

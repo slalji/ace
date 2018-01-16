@@ -2,36 +2,54 @@
 require_once '../includes/db.php'; // The mysql database connection script
 $filter = '';
 $where = '';
-$table ='';
+$section ='';
+$id='';
+$section='';
 
-$section = $mysqli->real_escape_string($_GET['section']);
 
-if(isset($section) ){
-	$table = $section;
+if (isset ($_GET['id']))
+	$id = $mysqli->real_escape_string($_GET['id']);
+
+if(isset($_GET['section'])){
+	$section = $mysqli->real_escape_string($_GET['section']);
 }
 
-$query=$table;
-if ($table == 'transactions')
+$query='';
+if ($section == 'transactions')
 	$query="SELECT t.id, t.fulltimestamp, t.msisdn, t.account, t.service,t.reference, t.amount, t.tstatus, t.lang, s.name from transactions t join savings_group s on s.groupid = t.groupid order by fulltimestamp desc";
-else if ($table == 'accountstatement')
+else if ($section == 'accountstatement')
 	$query="SELECT t.id, t.fulltimestamp, t.msisdn, t.transtype, t.transid,t.reference, t.service, t.amount, t.triggeredby, t.obal,t.cbal, s.name from ledger_savings t join savings_group s on s.groupid = t.groupid  order by t.fulltimestamp desc";
-else if ($table == 'loanstatement')
+else if ($section == 'loanstatement')
 	$query="SELECT t.id, t.fulltimestamp, t.msisdn, t.transtype, t.reference, t.service, t.principal, t.charge, t.pricipal_obal,t.principal_cbal, t.charge_obal,t.charge_cbal, s.name from ledger_loan t join savings_group s on s.groupid = t.groupid  order by t.fulltimestamp desc";
-
+else if ($section == 'cashout')
+	$query="SELECT t.id, t.fulltimestamp, t.msisdn, t.transid, t.serial, t.utilitytype, t.amount, t.status, t.message from cashout t  order by t.fulltimestamp desc";
+else if ($section == 'shareout')
+	$query="SELECT t.id, t.fulltimestamp, t.msisdn, t.userfee, t.total_shareout, t.totalsavings, t.income, t.avg_balance, t.sum_avg_balance, s.name from shareout t join savings_group s on s.groupid = t.groupid  order by t.fulltimestamp desc";
+else if ($section == 'savingsgroup')
+	$query="SELECT * from savings_group t order by fulltimestamp desc ";
+else if ($section == 'logs')
+	$query="SELECT t.id, t.date, s.name, t.reference, t.step, t.description  from tlog t join savings_group s on s.groupid = t.groupid  order by t.date desc";
+else if ($section == 'servicemsg' && !$id)
+	$query="SELECT id, service, description, errorcode,recipient,en_msg, sw_msg from service_message t order by id desc";
+else if ($section == 'servicemsg' && $id > 0)
+	$query="SELECT id, service, description, errorcode,recipient,en_msg, sw_msg from service_message where id =  ".$id;
 
 $result = $mysqli->query($query) or die($mysqli->error.__LINE__);
 
 $arr = array();
+$columns = array();
 if($result->num_rows > 0) {
-
+	$rows = mysqli_fetch_assoc($result);
+	$columns = array_keys($rows);
 	while($row = $result->fetch_assoc()) {
 		$arr[] = $row;
 	}
-}
 
+}
+var_dump($query);
 
 //$jsonData['data']=$arr;
-$cols = ['id','fulltimestamp', 'msisdn','account', 'service','references','amount','status','lang','name'];
+
 //$jsonData['columns']= $cols;
 //$json =  json_encode($jsonData);//.$query;
 //echo $json;
@@ -40,6 +58,7 @@ $cols = ['id','fulltimestamp', 'msisdn','account', 'service','references','amoun
 $my_results=array();
 foreach($arr as $d){
 	foreach ($d as $key => $value) {
+
 		if ($key == 'msisdn') {
 
 			$val = '+' . preg_replace('/\d{3}/', '$0 ', str_replace('.', null, trim($value)), 3);
@@ -48,77 +67,56 @@ foreach($arr as $d){
 			//echo $value;
 		}
 		if ($key == 'tstatus' && $value == 'SUCCESS'){
-			$val='<span class="label label-success">' .$value.'</span>';
-			$d['tstatus'] = $val;
+			$d[$key]=fn_format_label_success($key, $value);
+		}
+		if ($key == 'status' && $value == 'SUCCESS'){
+			$d[$key]=fn_format_label_success($key, $value);
 		}
 
 		if ($key == 'tstatus' && $value == 'FAILED'){
-			$val='<span class="label label-danger">' .$value.'</span>';
-			$d['tstatus'] = $val;
+			$d[$key]=fn_format_label_danger($key, $value);
+		}
+		if ($key == 'status' && $value == 'FAILED'){
+			$d[$key]=fn_format_label_danger($key, $value);
 		}
 		if ($key == 'transtype' && $value == 'DEBIT'){
-			$val='<span class="label label-success">' .$value.'</span>';
-			$d['transtype'] = $val;
+			$d[$key]=fn_format_label_success($key, $value);
 		}
 		if ($key == 'transtype' && $value == 'CREDIT'){
-			$val='<span class="label label-danger">' .$value.'</span>';
-			$d['transtype'] = $val;
+			$d[$key]=fn_format_label_danger($key, $value);
+
 		}
 		if ($key == 'lang' && $value == 'SW'){
 			$val='Swhaili';
 			$d['lang'] = $val;
 		}
-		if ($key == 'amount'  ){
-			$val=number_format($value);
-			$d['amount'] = $val;
-		}
-		if ($key == 'obal'  ){
-			$val=number_format($value);
-			$d['obal'] = $val;
-		}
-		if ($key == 'cbal'  ){
-			$val=number_format($value);
-			$d['cbal'] = $val;
-		}
-		if ($key == 'pricipal_obal'  ){
-			$val=number_format($value);
-			$d['pricipal_obal'] = $val;
-		}
-		if ($key == 'principal_cbal'  ){
-			$val=number_format($value);
-			$d['principal_cbal'] = $val;
-		}
-		if ($key == 'charge_obal'  ){
-			$val=number_format($value);
-			$d['charge_obal'] = $val;
-		}
-		if ($key == 'charge_cbal'  ){
-			$val=number_format($value);
-			$d['charge_cbal'] = $val;
-		}
-		if ($key == 'charge'  ){
-			$val=number_format($value);
-			$d['charge'] = $val;
-		}
-		if ($key == 'principal'  ){
-			$val=number_format($value);
-			$d['principal'] = $val;
-		}
-
-
+		$phone = substr($value, 0, 3);
+		if (is_numeric($value) && $key != 'msisdn' && $key != 'reference' && $key != 'id')
+			$d[$key]=fn_formatNums($key, $value);
 
 
 	}
-//var_dump($d);
+
 	$my_results[]=$d;
 }
 //$jsonData['data']=$arr;
 $jsonData['data']=$my_results;
-$jsonData['columns']=$cols;
+$jsonData['columns']=$columns;
 $json = json_encode($jsonData);
 echo $json;
 
-
+function fn_formatNums($key,$value){
+	$val=number_format($value);
+	return $val;
+}
+function fn_format_label_danger($key, $value){
+	$val='<span class="label label-danger arrowed">' .strtolower($value).'</span>';
+	return $val;
+}
+function fn_format_label_success($key, $value){
+	$val='<span class="label label-success arrowed">' .strtolower($value).'</span>';
+	return $val;
+}
 
 
 

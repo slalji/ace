@@ -1,5 +1,3 @@
-
-
 jQuery(function($) {
     //initiate dataTables plugin
     var section = $('#section').html();

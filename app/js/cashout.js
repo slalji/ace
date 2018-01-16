@@ -12,19 +12,17 @@ jQuery(function($) {
                 dataType: 'json',
                 data: {section:section}
             },
+
             "columns": [
                 { "data": "id" },
                 { "data": "fulltimestamp" },
                 { "data": "msisdn" },
-                { "data": "transtype" },
                 { "data": "transid" },
-                { "data": "reference" },
-                { "data": "service" },
+                { "data": "serial" },
+                { "data": "utilitytype" },
                 { "data": "amount" },
-                { "data": "triggeredby" },
-                { "data": "obal" },
-                { "data": "cbal" },
-                { "data": "name" }
+                { "data": "status" },
+                { "data": "message" }
 
             ],
             "dom": '<"toolbar">frtip'

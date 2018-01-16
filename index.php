@@ -1,5 +1,11 @@
 <?php
-$page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
+session_start();
+
+//if ($_SESSION["authenticated"] == 'true')
+	$page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
+/*else
+	header('location:http://localhost/eventually');
+*/
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,18 +37,11 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
 					</div>
 
 
-						<div class="page-header">
+						<div class="page-header" style="margin:1px 0px 1px 0px">
 							<div style="display: none" id="section"><?php echo $page; ?></div>
 							<h1 >
 
-								<?php
-									if ($page == 'transactions')
-										echo 'Transactions';
-									else if ($page == 'accountstatement')
-										echo 'Account Statement';
-									else
-										echo 'Dashboard';
-								?>
+								<?php echo ucfirst($page); ?>
 
 							</h1>
 						</div><!-- /.page-header -->

@@ -6,31 +6,30 @@
             <div class="pull-right tableTools-container"></div>
         </div>
         <div class="table-header">
-            Account Statement
+            Cash Out
         </div>
 
         <!-- div.table-responsive -->
 
         <!-- div.dataTables_borderWrap -->
-        <!--t.id, t.fulltimestamp, t.msisdn, t.transtype, t.transid,t.reference, t.service, t.amount, t.triggeredby, t.obal,t.cbal, s.name
--->
         <div>
             <table id="dynamic-table" class="table table-striped table-bordered table-hover">
                 <thead>
                 <tr>
-
                     <th xclass="detail-col hidden">ID</th>
                     <th>Date</th>
                     <th>Phone#</th>
-                    <th xclass="hidden-480">Trans Type</th>
                     <th xclass="hidden-480">Trans ID</th>
-                    <th class="hidden-480">References</th>
-                    <th>Service</th>
+
+                    <th>
+                        Serial
+                    </th>
+                    <th class="hidden-480">Utility Type</th>
+
                     <th>Amount</th>
-                    <th>Triggered By</th>
-                    <th>Opening Bal</th>
-                    <th>Closing Bal</th>
-                    <th>Group</th>
+                    <th>Status</th>
+                    <th>Message</th>
+
                 </tr>
                 </thead>
 
@@ -41,5 +40,3 @@
         </div>
     </div>
 </div>
-<script>
-</script>
