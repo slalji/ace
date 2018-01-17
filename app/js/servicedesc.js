@@ -3,7 +3,7 @@ $(document).ready(function() {
     $.ajax({
         type: 'GET',
         url: 'ajax/getService',
-        data:{section:'servicemsg'},
+        data:{section:'servicedesc'},
         success: function(data) {
 
             var obj = jQuery.parseJSON(data);
@@ -21,7 +21,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: 'POST',
-            url: 'ajax/setService',
+            url: 'ajax/setServiceDesc',
             data: $( "#theForm" ).serialize(),
             success: function( response ) {
                 console.log( response );
@@ -33,6 +33,9 @@ $(document).ready(function() {
 
                 }, 2000);
                 window.location.reload();
+            },
+            error: function( response ) {
+                alert('error '+JSON.stringify(response.responseText));
             }
 
 
@@ -43,23 +46,6 @@ $(document).ready(function() {
     });
 });
 
-/*$(document).ready(function() {
-    fn_service($('#service').val());
-    $('#service').change(function() {
-        id = $(this).val();
-        fn_service(id);
-    });
-});
-
-
-$('#myModal').on('shown.bs.modal', function (e) {
-    fn_service($('#service').val());
-    $('#service').change(function() {
-        id = $(this).val();
-        fn_service(id);
-    });
-});
-*/
 jQuery(function($) {
     $('#myModal').on('shown.bs.modal', function () {
         $('#myInput').focus()
@@ -83,13 +69,10 @@ jQuery(function($) {
             success: function(obj) {
 
                 $.each(obj, function (index, element) {
-                    document.getElementById('description').innerHTML = element.description;
-                    document.getElementById('errorcode').value= element.errorcode;
-                    document.getElementById('recipient').value = element.recipient;
-                    document.getElementById('en_msg').innerHTML = element.en_msg;
-                    document.getElementById('sw_msg').innerHTML = element.sw_msg;
+                    document.getElementById('service_en').innerHTML = element.service_en;
+                    document.getElementById('service_sw').innerHTML = element.service_sw;
                     var country = document.getElementById("service");
-                    console.log(element.errorcode);
+                    console.log(''+element.id);
                     var option = $('#service').children('option[value="'+ element.service +'"]');
                     option.attr('selected', 'selected');
 
@@ -153,11 +136,8 @@ jQuery(function($) {
                 },
                 { "data": "id" },
                 { "data": "service" },
-                { "data": "description" },
-                { "data": "errorcode" },
-                { "data": "recipient" },
-                { "data": "en_msg" },
-                { "data": "sw_msg" }
+                { "data": "service_en" },
+                { "data": "service_sw" }
 
 
 

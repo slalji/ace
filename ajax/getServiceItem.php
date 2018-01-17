@@ -1,10 +1,17 @@
 <?php 
 require_once '../includes/db.php'; // The mysql database connection script
+$section ='';
+if (isset($_GET['section']))
+	$section = $_GET['section'];
 if (isset ($_GET['id']))
 	$myid = $mysqli->real_escape_string($_GET['id']);
-
-$query="SELECT id, service, description, errorcode,recipient,en_msg, sw_msg from service_message where id = " . $myid;
-
+if ($section == 'servicedesc' && isset($myid))
+	$query = "SELECT * from service_desc where id = '" . $myid ."' ";
+else if ($section == 'servicemsg' && isset($myid))
+	$query="SELECT id, service, description, errorcode,recipient,en_msg, sw_msg from service_message where id = '" . $myid."'";
+else if ($section == 'settings' && isset($myid))
+	$query="SELECT * from settings where id = '" . $myid."'";
+//echo $query;
 $result = $mysqli->query($query) or die($mysqli->error.__LINE__);
 
 $arr = array();

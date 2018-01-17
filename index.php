@@ -1,11 +1,11 @@
 <?php
 session_start();
 
-//if ($_SESSION["authenticated"] == 'true')
+//if (isset($_SESSION["authenticated"]) && $_SESSION["authenticated"] == 'true')
 	$page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
-/*else
-	header('location:http://localhost/eventually');
-*/
+$page_title[]= array();
+$page_title = ['dashboard'=>'Dashboard', 'transactions' => 'Transactions', 'servicemsg' => 'Service Messages', 'accountstatement' => 'Account Statement', 'loanstatement' => 'Loan Statement', 'cashout' => 'Cash Out', 'shareout' => 'Share Out', 'savingsgroup' => 'Savings Group', 'servicedesc' =>'Service Description', 'settings' => 'Settings', 'logs' =>'Log Report']
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,7 +41,7 @@ session_start();
 							<div style="display: none" id="section"><?php echo $page; ?></div>
 							<h1 >
 
-								<?php echo ucfirst($page); ?>
+								<?php echo $page_title[$page]; ?>
 
 							</h1>
 						</div><!-- /.page-header -->

@@ -3,16 +3,16 @@ $(document).ready(function() {
     $.ajax({
         type: 'GET',
         url: 'ajax/getService',
-        data:{section:'servicemsg'},
+        data:{section:'settings'},
         success: function(data) {
 
             var obj = jQuery.parseJSON(data);
 
-            var str = '<option value=0>Select Service</option>';
+            var str = '<option value=0>Select Setting</option>';
             $.each(obj, function (index, value) {
-                str += "<option value=" + value['service'] + ">" + value['service'] + "</option>";
+                str += "<option value=" + value['setting'] + ">" + value['setting'] + "</option>";
             });
-            document.getElementById('service').innerHTML = str;
+            document.getElementById('setting').innerHTML = str;
             //console.log($('#service').html());
         }
     });
@@ -21,7 +21,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: 'POST',
-            url: 'ajax/setService',
+            url: 'ajax/setServiceSetting',
             data: $( "#theForm" ).serialize(),
             success: function( response ) {
                 console.log( response );
@@ -33,6 +33,9 @@ $(document).ready(function() {
 
                 }, 2000);
                 window.location.reload();
+            },
+            success: function( response ) {
+                alert('error '+JSON.stringify(response));//.responseText));
             }
 
 
@@ -43,23 +46,6 @@ $(document).ready(function() {
     });
 });
 
-/*$(document).ready(function() {
-    fn_service($('#service').val());
-    $('#service').change(function() {
-        id = $(this).val();
-        fn_service(id);
-    });
-});
-
-
-$('#myModal').on('shown.bs.modal', function (e) {
-    fn_service($('#service').val());
-    $('#service').change(function() {
-        id = $(this).val();
-        fn_service(id);
-    });
-});
-*/
 jQuery(function($) {
     $('#myModal').on('shown.bs.modal', function () {
         $('#myInput').focus()
@@ -83,14 +69,11 @@ jQuery(function($) {
             success: function(obj) {
 
                 $.each(obj, function (index, element) {
-                    document.getElementById('description').innerHTML = element.description;
-                    document.getElementById('errorcode').value= element.errorcode;
-                    document.getElementById('recipient').value = element.recipient;
-                    document.getElementById('en_msg').innerHTML = element.en_msg;
-                    document.getElementById('sw_msg').innerHTML = element.sw_msg;
-                    var country = document.getElementById("service");
-                    console.log(element.errorcode);
-                    var option = $('#service').children('option[value="'+ element.service +'"]');
+                    document.getElementById('sgroup').value = element.sgroup;
+                    document.getElementById('setting_value').value = element.value;
+                    var country = document.getElementById("setting");
+                    console.log(''+element.id);
+                    var option = $('#setting').children('option[value="'+ element.setting +'"]');
                     option.attr('selected', 'selected');
 
                 });
@@ -152,12 +135,9 @@ jQuery(function($) {
                     return '<a href="#" data-toggle="modal" data-target="#myModal" data-row-id='+row.id+'><i class="fa fa-pencil pink"></i></a>';}
                 },
                 { "data": "id" },
-                { "data": "service" },
-                { "data": "description" },
-                { "data": "errorcode" },
-                { "data": "recipient" },
-                { "data": "en_msg" },
-                { "data": "sw_msg" }
+                { "data": "setting" },
+                { "data": "sgroup" },
+                { "data": "value" }
 
 
 

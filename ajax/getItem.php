@@ -25,6 +25,10 @@ else if ($section == 'logs')
 	$query="SELECT t.id, t.date, s.name, t.reference, t.step, t.description  from tlog t join savings_group s on s.groupid = t.groupid  order by t.date desc";
 else if ($section == 'servicemsg' )
 	$query="SELECT id, service, description, errorcode,recipient,en_msg, sw_msg from service_message t order by id desc";
+else if ($section == 'servicedesc' )
+	$query="SELECT * from service_desc t order by id desc";
+else if ($section == 'settings' )
+	$query="SELECT * from settings t order by id desc";
 
 $result = $mysqli->query($query) or die($mysqli->error.__LINE__);
 
