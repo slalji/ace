@@ -6,9 +6,6 @@ jQuery(function($) {
     //initiate dataTables plugin
     var section = $('#section').html();
     console.log(section);
-    var start;
-    var end;
-
     var myTable =
         $('#dynamic-table').DataTable( {
             //serverSide: true,
@@ -35,8 +32,52 @@ jQuery(function($) {
             "dom": '<"toolbar">frtip'
         } );
     //$("div.toolbar").html('<input type="text" id="min-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd" placeholder="Date Ranage:"> ');
-    $("div.toolbar").html('<div id="reportrange" class="pull-left" style="border-radus:5px ;background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 30%"> <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;<span id="date-text"></span> <b class="caret"></b></div>');
+    $("div.toolbar").html('<div id="reportrange" class="pull-left" style="border-radus:5px ;background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 30%"> <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;<span></span> <b class="caret"></b></div>');
+    $(function() {
+        $('#reportrange').daterangepicker({
+            "startDate": "01/11/2018",
+            "endDate": "01/17/2018"
+        }, function (start, end) {
+            console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') +  ')');
+            $.fn.dataTable.ext.search.push(
+                function( settings, data, dataIndex ) {
+                    var min = start.format('YYYY-MM-DD');
+                    var max = end.format('YYYY-MM-DD');
 
+                    var cal = /*parseFloat*/( data[1] ) || 0; // use data for the date range column
+
+
+                    if ( ( ( min ) && ( max ) ) ||
+                        ( ( min ) && cal <= max ) ||
+                        ( min <= cal   && ( max ) ) ||
+                        ( min <= cal   && cal <= max ) )
+                    {
+
+
+                        return true;
+                    }
+                    return false;
+                }
+
+            );
+
+
+        });
+        myTable.draw();
+    });
+
+
+
+// Re-draw the table when the a date range filter changes
+    /*$('#reportrange span').change(function() {
+        alert();
+        myTable.draw();
+    });*/
+// Re-draw the table when the a date range filter changes
+    $('#reportrange').change(function() {
+        alert();
+        myTable.draw();
+    });
 
 
 
@@ -117,29 +158,7 @@ jQuery(function($) {
     }, 500);
 
 
-    $('#reportrange').daterangepicker({
-        ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        }
-        ,
-        "opens": "right",
-        format: 'DD-MM-YYYY'
 
-    },
-    function (astart, aend, label) {
-// Parse it to a moment
-        var s = moment(astart.toISOString());
-        var e = moment(aend.toISOString());
-        startdate = s.format("YYYY-MM-DD");
-        enddate = e.format("YYYY-MM-DD");
-        console.log(start);
-        console.log(end);
-    });
 
 
 
@@ -161,68 +180,9 @@ jQuery(function($) {
         return 'left';
     }
 
-// Date range script - Start of the sscript
-    $("#reportrange").daterangepicker({
-        autoUpdateInput: false,
-        locale: {
-            "cancelLabel": "Clear"
-        }
-    });
-
-    $("#reportrange").on('apply.daterangepicker', function(ev, picker) {
-        start = picker.startDate.format('YYYY-MM-DD');
-        end =  picker.endDate.format('YYYY-MM-DD');
-
-        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' to ' + picker.endDate.format('YYYY-MM-DD'));
-        document.getElementById('date-text').innerHTML = start +' - ' + end;
-
-        myTable.draw();
-    });
-
-    $("#reportrange").on('cancel.daterangepicker', function(ev, picker) {
-        $(this).val('');
-        myTable.draw();
-    });
-// Date range script - END of the script
-
-    $.fn.dataTableExt.afnFiltering.push(
-        function( oSettings, aData, iDataIndex ) {
-
-            var grab_daterange = $("#reportrange").val();
-            var give_results_daterange = grab_daterange.split(" to ");
-            var filterstart = give_results_daterange[0];
-            var filterend = give_results_daterange[1];
-            var iStartDateCol = 1; //using column 2 in this instance
-            var iEndDateCol = 1;
-            var tabledatestart = aData[iStartDateCol];
-            var tabledateend= aData[iEndDateCol];
-
-
-            if ( !filterstart && !filterend )
-            {
-                return true;
-            }
-            else if ((moment(filterstart).isSame(tabledatestart) || moment(filterstart).isBefore(tabledatestart)) && filterend === "")
-            {
-                return true;
-            }
-            else if ((moment(filterstart).isSame(tabledatestart) || moment(filterstart).isAfter(tabledatestart)) && filterstart === "")
-            {
-                return true;
-            }
-            else if ((moment(filterstart).isSame(tabledatestart) || moment(filterstart).isBefore(tabledatestart)) && (moment(filterend).isSame(tabledateend) || moment(filterend).isAfter(tabledateend)))
-            {
-                return true;
-            }
-            return false;
-        }
-    );
-
-//End of the datable
 
 
 
 
 });
-
 
