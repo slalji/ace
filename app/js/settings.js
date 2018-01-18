@@ -141,8 +141,8 @@ jQuery(function($) {
 
 
 
-            ],
-            "dom": '<"toolbar">frtip'
+            ]//,
+           // "dom": '<"toolbar">frtip' NO DATE RANGE
         } );
     //$("div.toolbar").html('<input type="text" id="min-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd" placeholder="Date Ranage:"> ');
     $("div.toolbar").html('<div id="reportrange_old" class="pull-left" style="border-radus:5px ;background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 30%"> <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;<span></span> <b class="caret"></b></div');

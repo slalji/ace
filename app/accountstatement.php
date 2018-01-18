@@ -20,10 +20,10 @@
                 <tr>
 
                     <th xclass="detail-col hidden">ID</th>
-                    <th>Date</th>
+
                     <th>Phone#</th>
                     <th xclass="hidden-480">Trans Type</th>
-                    <th xclass="hidden-480">Trans ID</th>
+                    
                     <th class="hidden-480">References</th>
                     <th>Service</th>
                     <th>Amount</th>

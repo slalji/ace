@@ -14,10 +14,10 @@ jQuery(function($) {
             },
             "columns": [
                 { "data": "id" },
-                { "data": "fulltimestamp" },
+                //{ "data": "fulltimestamp" },
                 { "data": "msisdn" },
                 { "data": "transtype" },
-                { "data": "transid" },
+               // { "data": "transid" },
                 { "data": "reference" },
                 { "data": "service" },
                 { "data": "amount" },
@@ -26,21 +26,11 @@ jQuery(function($) {
                 { "data": "cbal" },
                 { "data": "name" }
 
-            ],
-            "dom": '<"toolbar">frtip'
+            ]//,
+            //"dom": '<"toolbar">frtip'
         } );
-    //$("div.toolbar").html('<input type="text" id="min-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd" placeholder="Date Ranage:"> ');
-    $("div.toolbar").html('<div id="reportrange_old" class="pull-left" style="border-radus:5px ;background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 30%"> <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;<span></span> <b class="caret"></b></div');
+    $("div.toolbar").html('<div id="reportrange" class="pull-left" style="border-radus:5px ;background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 30%"> <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;<span id="date-text"></span> <b class="caret"></b></div>');
 
-    $('#reportrange').keyup( function() {
-        myTable.draw();
-    } );
-
-
-// Re-draw the table when the a date range filter changes
-    $('.date-range-filter').change(function() {
-        myTable.draw();
-    });
 
     //$('#my-table_filter').hide();
 
@@ -122,73 +112,6 @@ jQuery(function($) {
 
 
 
-    myTable.on( 'select', function ( e, dt, type, index ) {
-        if ( type === 'row' ) {
-            $( myTable.row( index ).node() ).find('input:checkbox').prop('checked', true);
-        }
-    } );
-    myTable.on( 'deselect', function ( e, dt, type, index ) {
-        if ( type === 'row' ) {
-            $( myTable.row( index ).node() ).find('input:checkbox').prop('checked', false);
-        }
-    } );
-
-
-
-
-    /////////////////////////////////
-    //table checkboxes
-    $('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
-
-    //select/deselect all rows according to table header checkbox
-    $('#dynamic-table > thead > tr > th input[type=checkbox], #dynamic-table_wrapper input[type=checkbox]').eq(0).on('click', function(){
-        var th_checked = this.checked;//checkbox inside "TH" table header
-
-        $('#dynamic-table').find('tbody > tr').each(function(){
-            var row = this;
-            if(th_checked) myTable.row(row).select();
-            else  myTable.row(row).deselect();
-        });
-    });
-
-    //select/deselect a row when the checkbox is checked/unchecked
-    $('#dynamic-table').on('click', 'td input[type=checkbox]' , function(){
-        var row = $(this).closest('tr').get(0);
-        if(this.checked) myTable.row(row).deselect();
-        else myTable.row(row).select();
-    });
-
-
-
-    $(document).on('click', '#dynamic-table .dropdown-toggle', function(e) {
-        e.stopImmediatePropagation();
-        e.stopPropagation();
-        e.preventDefault();
-    });
-
-
-
-    //And for the first simple table, which doesn't have TableTools or dataTables
-    //select/deselect all rows according to table header checkbox
-    var active_class = 'active';
-    $('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
-        var th_checked = this.checked;//checkbox inside "TH" table header
-
-        $(this).closest('table').find('tbody > tr').each(function(){
-            var row = this;
-            if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
-            else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
-        });
-    });
-
-    //select/deselect a row when the checkbox is checked/unchecked
-    $('#simple-table').on('click', 'td input[type=checkbox]' , function(){
-        var $row = $(this).closest('tr');
-        if($row.is('.detail-row ')) return;
-        if(this.checked) $row.addClass(active_class);
-        else $row.removeClass(active_class);
-    });
-
 
 
     /********************************/
@@ -220,21 +143,6 @@ jQuery(function($) {
     });
     /***************/
 
-
-
-
-
-    /**
-     //add horizontal scrollbars to a simple table
-     $('#simple-table').css({'width':'2000px', 'max-width': 'none'}).wrap('<div style="width: 1000px;" />').parent().ace_scroll(
-     {
-       horizontal: true,
-       styleClass: 'scroll-top scroll-dark scroll-visible',//show the scrollbars on top(default is bottom)
-       size: 2000,
-       mouseWheelLock: true
-     }
-     ).css('padding-top', '12px');
-     */
 
 
 })

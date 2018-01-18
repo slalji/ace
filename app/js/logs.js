@@ -25,8 +25,7 @@ jQuery(function($) {
             ],
             "dom": '<"toolbar">frtip'
         } );
-    //$("div.toolbar").html('<input type="text" id="min-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd" placeholder="Date Ranage:"> ');
-    $("div.toolbar").html('<div id="reportrange_old" class="pull-left" style="border-radus:5px ;background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 30%"> <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;<span></span> <b class="caret"></b></div');
+    $("div.toolbar").html('<div id="reportrange" class="pull-left" style="border-radus:5px ;background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 30%"> <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;<span id="date-text"></span> <b class="caret"></b></div>');
 
     $('#reportrange').keyup( function() {
         myTable.draw();
@@ -130,63 +129,6 @@ jQuery(function($) {
     } );
 
 
-
-
-    /////////////////////////////////
-    //table checkboxes
-    $('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
-
-    //select/deselect all rows according to table header checkbox
-    $('#dynamic-table > thead > tr > th input[type=checkbox], #dynamic-table_wrapper input[type=checkbox]').eq(0).on('click', function(){
-        var th_checked = this.checked;//checkbox inside "TH" table header
-
-        $('#dynamic-table').find('tbody > tr').each(function(){
-            var row = this;
-            if(th_checked) myTable.row(row).select();
-            else  myTable.row(row).deselect();
-        });
-    });
-
-    //select/deselect a row when the checkbox is checked/unchecked
-    $('#dynamic-table').on('click', 'td input[type=checkbox]' , function(){
-        var row = $(this).closest('tr').get(0);
-        if(this.checked) myTable.row(row).deselect();
-        else myTable.row(row).select();
-    });
-
-
-
-    $(document).on('click', '#dynamic-table .dropdown-toggle', function(e) {
-        e.stopImmediatePropagation();
-        e.stopPropagation();
-        e.preventDefault();
-    });
-
-
-
-    //And for the first simple table, which doesn't have TableTools or dataTables
-    //select/deselect all rows according to table header checkbox
-    var active_class = 'active';
-    $('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
-        var th_checked = this.checked;//checkbox inside "TH" table header
-
-        $(this).closest('table').find('tbody > tr').each(function(){
-            var row = this;
-            if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
-            else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
-        });
-    });
-
-    //select/deselect a row when the checkbox is checked/unchecked
-    $('#simple-table').on('click', 'td input[type=checkbox]' , function(){
-        var $row = $(this).closest('tr');
-        if($row.is('.detail-row ')) return;
-        if(this.checked) $row.addClass(active_class);
-        else $row.removeClass(active_class);
-    });
-
-
-
     /********************************/
     //add tooltip for small view action buttons in dropdown menu
     $('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
@@ -219,18 +161,64 @@ jQuery(function($) {
 
 
 
+// Date range script - Start of the sscript
+    $("#reportrange").daterangepicker({
+        autoUpdateInput: false,
+        locale: {
+            "cancelLabel": "Clear"
+        }
+    });
 
-    /**
-     //add horizontal scrollbars to a simple table
-     $('#simple-table').css({'width':'2000px', 'max-width': 'none'}).wrap('<div style="width: 1000px;" />').parent().ace_scroll(
-     {
-       horizontal: true,
-       styleClass: 'scroll-top scroll-dark scroll-visible',//show the scrollbars on top(default is bottom)
-       size: 2000,
-       mouseWheelLock: true
-     }
-     ).css('padding-top', '12px');
-     */
+    $("#reportrange").on('apply.daterangepicker', function(ev, picker) {
+        start = picker.startDate.format('YYYY-MM-DD');
+        end =  picker.endDate.format('YYYY-MM-DD');
+
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' to ' + picker.endDate.format('YYYY-MM-DD'));
+        document.getElementById('date-text').innerHTML = start +' - ' + end;
+
+        myTable.draw();
+    });
+
+    $("#reportrange").on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+        myTable.draw();
+    });
+// Date range script - END of the script
+
+    $.fn.dataTableExt.afnFiltering.push(
+        function( oSettings, aData, iDataIndex ) {
+
+            var grab_daterange = $("#reportrange").val();
+            var give_results_daterange = grab_daterange.split(" to ");
+            var filterstart = give_results_daterange[0];
+            var filterend = give_results_daterange[1];
+            var iStartDateCol = 1; //using column 2 in this instance
+            var iEndDateCol = 1;
+            var tabledatestart = aData[iStartDateCol];
+            var tabledateend= aData[iEndDateCol];
+
+
+            if ( !filterstart && !filterend )
+            {
+                return true;
+            }
+            else if ((moment(filterstart).isSame(tabledatestart) || moment(filterstart).isBefore(tabledatestart)) && filterend === "")
+            {
+                return true;
+            }
+            else if ((moment(filterstart).isSame(tabledatestart) || moment(filterstart).isAfter(tabledatestart)) && filterstart === "")
+            {
+                return true;
+            }
+            else if ((moment(filterstart).isSame(tabledatestart) || moment(filterstart).isBefore(tabledatestart)) && (moment(filterend).isSame(tabledateend) || moment(filterend).isAfter(tabledateend)))
+            {
+                return true;
+            }
+            return false;
+        }
+    );
+
+//End of the datable
 
 
 })

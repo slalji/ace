@@ -1,19 +1,14 @@
 <?php 
-require_once '../includes/db.php'; // The mysql database connection script
-$filter = '%';
-if(isset($_GET['group'])){
-	$filter = $mysqli->real_escape_string($_GET['group']);
-}
-$query="SELECT t.groupid, name from savings_group s join transactions t on s.groupid = t.groupid group by t.groupid order by s.name ";
+require_once '../../includes/db.php'; // The mysql database connection script
+
+$query="SELECT distinct t.groupid  from savings_group  ";
 $result = $mysqli->query($query) or die($mysqli->error.__LINE__);
 
 $arr = array();
 if($result->num_rows > 0) {
-	while($row = $result->fetch_assoc()) {
-		$arr[] = $row;	
-	}
+	echo  $result->num_rows;
 }
+else
+	echo -1;
 
-# JSON-encode the response
-echo $json_response = json_encode($arr);
 ?>
