@@ -23,7 +23,7 @@
 
                     <th>Phone#</th>
                     <th xclass="hidden-480">Trans Type</th>
-                    
+
                     <th class="hidden-480">References</th>
                     <th>Service</th>
                     <th>Amount</th>

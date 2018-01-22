@@ -106,11 +106,11 @@ function fn_formatNums($key,$value){
 	return $val;
 }
 function fn_format_label_danger($key, $value){
-	$val='<span class="label label-danger arrowed">' .strtolower($value).'</span>';
+	$val='<span class="label label-danger arrowed arrowed-right arrowed-in">' .strtolower($value).'</span>';
 	return $val;
 }
 function fn_format_label_success($key, $value){
-	$val='<span class="label label-success arrowed">' .strtolower($value).'</span>';
+	$val='<span class="label label-success arrowed-in arrowed-in-right">' .strtolower($value).'</span>';
 	return $val;
 }
 

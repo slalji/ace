@@ -104,14 +104,14 @@
 										<i class="ace-icon fa fa-times"></i>
 									</button>
 
-									<i class="ace-icon fa fa-check green"></i>
+									<span><i class="fa fa-user-secret fa-5x"></i></span>
+								<span class="user-info">
+									<small>Welcome,</small>
+									<?php
+									isset($_SESSION['fullname']) ? ucfirst($_SESSION['fullname']) : 'Please Login';
+									?>
 
-									Welcome to
-									<strong class="green">
-										Ace
-										<small>(v1.4)</small>
-									</strong>,
-	лёгкий, многофункциональный и простой в использовании шаблон для админки на bootstrap 3.3.6. Загрузить исходники с <a href="https://github.com/bopoda/ace">github</a> (with minified ace js/css files).
+								</span
 								</div>
 
 								<div class="row">
@@ -124,7 +124,10 @@
 											</div>
 
 											<div class="infobox-data">
-												<span class="infobox-data-number">17</span>
+												<span class="infobox-data-number">
+													<?php include "class/dashboard.php";
+													$d = new dashboard(); echo "here".$d->totalGroups();?>
+												</span>
 												<div class="infobox-content">Total groups</div>
 											</div>
 

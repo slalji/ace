@@ -14,7 +14,8 @@
                                         <i class="fa fa-users fa-2x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class="huge">17</div>
+                                        <div class="huge"><?php include "class/dashboard.php";
+                                            $d = new dashboard(); echo "".$d->totalGroups();?></div>
                                         <div>Total Groups</div>
                                     </div>
                                 </div>

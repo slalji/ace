@@ -31,7 +31,7 @@
 									<small>Welcome,</small>
                                     <?php
                                     isset($_SESSION['fullname']) ? ucfirst($_SESSION['fullname']) : 'Please Login';
-                                   // echo ucfirst($_SESSION['fullname']);?>
+                                  ?>
 
 								</span>
 
